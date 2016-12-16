@@ -12,9 +12,9 @@ namespace ConsoleApplication1
     {
         static void Main(string[] args)
         {
-            int zoom = 15;
-            int width = 400;
-            int height = 300;
+            int zoom = 13;
+            int width = 500;
+            int height = 500;
             int tdim = 256;
             double lat = 21.036264;
             double lng = 105.774866;
@@ -48,34 +48,40 @@ namespace ConsoleApplication1
             int ystop = YY+10;
 
             string url2 = "http://tile.openstreetmap.org/";
-            string url = "https://b.tile.thunderforest.com/cycle/";
+            string url = @"C:\Downloads\newtask\";
             string path2 = @"D:\DOWN\MapData\OpenStreetMap\";
-            string path = @"D:\DOWN\MapData\ThunderForest\";
+            string path = @"C:\HR2D\MapData\SatMap\";
 
 
-            try
-            {
+            
                 for (int i = xstart; i < xstop; i++)
                     for (int j = ystart; j < ystop; j++)
                     {
-                        string urldown = url + zoom + "/" + i + "/" + j + ".png";
-                        string pathdown = path + zoom + @"\" +i;
-                        if (!Directory.Exists(pathdown))
+                        try
                         {
-                            Directory.CreateDirectory(pathdown);
-                        }
+                            //string urldown = url + zoom + "/" + i + "/" + j + ".png";
+                            string urldown = url + "gs_" + i + "_" + j + "_" + zoom + ".jpg";
+                            string pathdown = path + zoom + @"\" +i;
+                            if (!Directory.Exists(pathdown))
+                            {
+                                Directory.CreateDirectory(pathdown);
+                            }
 
-                        pathdown = pathdown +  @"\" + j + ".png";
-                        using (var client = new WebClient())
+                            pathdown = pathdown +  @"\" + j + ".jpg";
+                            if (!Directory.Exists(pathdown))
+                            {
+                                using (var client = new WebClient())
+                                {
+                                    client.DownloadFile(urldown, pathdown);
+                                }
+                            }
+                        }
+                        catch (Exception _ex)
                         {
-                            client.DownloadFile(urldown, pathdown);
+                            Console.WriteLine(_ex.ToString());
                         }
                     }
-            }
-            catch(Exception _ex)
-            {
-                Console.WriteLine(_ex.ToString());
-            }
+            
         }
     }
 }
